@@ -103,15 +103,18 @@ class TelegramClient:
     def send_discussion_message(self, text, reply_to_message_id):
         if not self.discussion_id or not reply_to_message_id:
             return None
-        url_template = "https://nphacvsdjgoxdcsrrfsb.supabase.co/rest/v1/news"
-        params = {
-            "chat_id": self.discussion_id,
-            "text": text,
-            "parse_mode": "html",
-            "disable_web_page_preview": False,
-            "reply_to_message_id": reply_to_message_id
+        headers = {
+            "apikey": os.environ["SUPABASE_API_KEY"]
+            "Authorization": os.environ["SUPABASE_BEARER"]
         }
-        return self.post(url_template.format(self.bot_token), params)
+        params = {
+            # "chat_id": self.discussion_id,
+            "text": text,
+            # "parse_mode": "html",
+            # "disable_web_page_preview": False,
+            # "reply_to_message_id": reply_to_message_id
+        }
+        return self.post(os.environ["SUPABASE_LINK"], params, headers)
 
     def get_updates(self):
         url_template = "https://api.telegram.org/bot{}/getUpdates"
@@ -149,9 +152,9 @@ class TelegramClient:
     def get_discussion(self, message_id):
         return self.discussions.get(message_id, None)
 
-    def post(self, url, params):
+    def post(self, url, params, headers):
         try:
-            return requests.post(url, data=params)
+            return requests.post(url, data=params, headers=headers)
         except Exception:
             sleep(10)
             return self.post(url, params)
