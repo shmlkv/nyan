@@ -103,7 +103,7 @@ class TelegramClient:
     def send_discussion_message(self, text, reply_to_message_id):
         if not self.discussion_id or not reply_to_message_id:
             return None
-        url_template = "https://api.telegram.org/bot{}/sendMessage"
+        url_template = "https://nphacvsdjgoxdcsrrfsb.supabase.co/rest/v1/news"
         params = {
             "chat_id": self.discussion_id,
             "text": text,
